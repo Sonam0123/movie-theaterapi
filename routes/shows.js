@@ -23,15 +23,20 @@ router.get("/:genre", async (req, res) => {
     res.send(show)
 })
 
-router.put("/rating/:id", async (req, res) => {
+router.put("/rating/:id", [check("rating").not().isEmpty().withMessage("Rating cannot be empty or contain whitespace")], async (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() })
+    }
     const show = await Show.findByPk(req.params.id)
     show.rating = req.body.rating
     await show.save()
     res.send(show)
 })
 
+
 router.put("/status/:id", [check("status").not().isEmpty().withMessage("Status cannot be empty")],
-[check("status").isLength({ min: 5, max: 25})], async (req, res) => {
+[check("status").isLength({ min: 5, max: 25}).withMessage("Status length must be between 5-25 characters")], async (req, res) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() })

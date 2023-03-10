@@ -23,7 +23,6 @@ router.get("/:id/shows", async (req, res) => {
     })
     res.send(user.shows)
 })
-
 router.put("/:id/shows", async (req, res) => {
     const user = await User.findByPk(req.params.id)
     const show = await Show.findByPk(req.body.showId)
