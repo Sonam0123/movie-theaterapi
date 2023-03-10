@@ -5,6 +5,8 @@ const { User } = require("../models/index")
 const { Show } = require("../models/index")
 
 
+
+
 router.get("/", async (req, res) => {
     const users = await User.findAll()
     res.send(users)

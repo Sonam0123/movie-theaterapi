@@ -1,5 +1,5 @@
 const express = require("express")
-
+const { check, validationResult } = require("express-validator")
 const router = express.Router()
 const { Show } = require("../models/index")
 
@@ -23,19 +23,24 @@ router.get("/:genre", async (req, res) => {
     res.send(show)
 })
 
-router.put("/:id", async (req, res) => {
+router.put("/rating/:id", async (req, res) => {
     const show = await Show.findByPk(req.params.id)
     show.rating = req.body.rating
     await show.save()
     res.send(show)
 })
 
-router.put("/:id/status", async (req, res) => {
+router.put("/status/:id", [check("status").not().isEmpty().withMessage("Status cannot be empty")], async (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() })
+    }
     const show = await Show.findByPk(req.params.id)
     show.status = req.body.status
     await show.save()
     res.send(show)
 })
+
 
 router.delete("/:id", async (req, res) => {
     const show = await Show.findByPk(req.params.id)
