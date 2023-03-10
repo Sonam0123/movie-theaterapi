@@ -14,14 +14,17 @@ router.get("/:id", async (req, res) => {
     res.send(show)
 })
 
-router.get("/:genre", async (req, res) => {
-    const show = await Show.findAll({
+//The Show Router should get shows of a specific genre using an endpoint. For example, /shows/genres/Comedy should return all shows with a genre of Comedy.
+router.get("/genres/:genre", async (req, res) => {
+    const shows = await Show.findAll({
         where: {
             genre: req.params.genre
         }
     })
-    res.send(show)
+    res.send(shows)
 })
+
+
 
 router.put("/rating/:id", [check("rating").not().isEmpty().withMessage("Rating cannot be empty or contain whitespace")], async (req, res) => {
     const errors = validationResult(req)
