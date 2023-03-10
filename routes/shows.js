@@ -14,7 +14,6 @@ router.get("/:id", async (req, res) => {
     res.send(show)
 })
 
-//The Show Router should get shows of a specific genre using an endpoint. For example, /shows/genres/Comedy should return all shows with a genre of Comedy.
 router.get("/genres/:genre", async (req, res) => {
     const shows = await Show.findAll({
         where: {
@@ -23,6 +22,15 @@ router.get("/genres/:genre", async (req, res) => {
     })
     res.send(shows)
 })
+
+router.put("/watched/:id", async (req, res) => {
+    const show = await Show.findByPk(req.params.id)
+    show.watched = req.body.watched
+    await show.save()
+    res.send(show)
+})
+
+
 
 
 
