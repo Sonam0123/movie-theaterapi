@@ -30,7 +30,8 @@ router.put("/rating/:id", async (req, res) => {
     res.send(show)
 })
 
-router.put("/status/:id", [check("status").not().isEmpty().withMessage("Status cannot be empty")], async (req, res) => {
+router.put("/status/:id", [check("status").not().isEmpty().withMessage("Status cannot be empty")],
+[check("status").isLength({ min: 5, max: 25})], async (req, res) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() })
